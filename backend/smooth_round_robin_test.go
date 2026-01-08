@@ -186,9 +186,9 @@ func TestSmoothRRConcurrency(t *testing.T) {
 
 	totalCalls := goroutines * callsPerGoroutine
 	expectedRatio := map[string]float64{
-		"a": 0.5,  // 5/10
-		"b": 0.3,  // 3/10
-		"c": 0.2,  // 2/10
+		"a": 0.5, // 5/10
+		"b": 0.3, // 3/10
+		"c": 0.2, // 2/10
 	}
 
 	t.Logf("Total calls: %d", totalCalls)
@@ -232,8 +232,8 @@ func TestSmoothRRSmoothness(t *testing.T) {
 	}
 
 	t.Logf("Max consecutive: %d", maxConsecutive)
-	// 权重4:1，最多不应该连续太多次
-	if maxConsecutive > 3 {
+	// 权重4:1时，连续4次是合理的（不超过4次即为正常平滑分布）
+	if maxConsecutive > 4 {
 		t.Errorf("distribution not smooth enough: max consecutive = %d", maxConsecutive)
 	}
 }
