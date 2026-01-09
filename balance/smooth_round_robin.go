@@ -26,6 +26,13 @@ type smoothRoundRobinBalancer struct {
 	lock  sync.RWMutex
 }
 
+// NewSmoothRRBalancer
+// 下面用挑水来解释，平滑加权轮训的核心：
+// 1、每次选取力气最大的节点
+// 2、每次迭代时，每个节点的力气=weigth+effectvieWeight
+// 3、比较节点自己的力气，是否大于总的力气
+// 4、如果大于总的力气，则返回。否则继迭代
+// 5、最后，选中的节点，要减掉力气
 func NewSmoothRRBalancer(nodes []*Node) SmoothBalancer {
 	if len(nodes) == 0 {
 		panic(fmt.Errorf("new smooth rr failed: nodes is empty"))
