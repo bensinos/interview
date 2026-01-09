@@ -1,7 +1,6 @@
-package backend
+package balance
 
 import (
-	"fmt"
 	"sync/atomic"
 )
 
@@ -18,18 +17,15 @@ type RoundRobinBalancer struct {
 }
 
 func NewRoundRobinBalancer(servers []string) Balancer {
-	if len(servers) == 0 {
-		panic(fmt.Errorf("new round robin balancer failed: servers is empty"))
-	}
-
-	s := make([]string, len(servers))
-	copy(s, servers)
 	return &RoundRobinBalancer{
-		servers: s,
+		servers: servers,
 	}
 }
 
 func (r *RoundRobinBalancer) Next() string {
+	if len(r.servers) == 0 {
+		return ""
+	}
 	// 1. 原子递增索引值（保证并发安全）
 	// 注意：atomic.AddUint64 返回的是增加后的新值
 	newVal := atomic.AddUint64(&r.index, 1)
